@@ -12,7 +12,6 @@ async function app() {
   // Create an object from Tensorflow.js data API which could capture image
   // from the web camera as Tensor.
   const webcam = await tf.data.webcam(webcamElement);
-  console.log(mediaDevices.enumerateDevices());
   while (true) {
     const img = await webcam.capture();
     const result = await net.classify(img);
