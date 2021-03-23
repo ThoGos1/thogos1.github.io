@@ -17,8 +17,8 @@ async function app() {
     const result = await net.classify(img);
 
     document.getElementById('console').innerText = `
-      prediction: ${result[0].className}\n
-      probability: ${result[0].probability}
+      Prediction: ${result[0].className}\n
+      Probability: ${result[0].probability}
     `;
     // Dispose the tensor to release the memory.
     img.dispose();
