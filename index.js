@@ -70,8 +70,8 @@ function Promote() {
           document.getElementById("dogOrCat").src = catImages[i];
         }
     }
-    console.log('dog value' + profile[0]);
-    console.log('cat value' + profile[1]);
+    console.log('dog value: ' + profile[0]);
+    console.log('cat value: ' + profile[1]);
 }
 
 function Demote() {
