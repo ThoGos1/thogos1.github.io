@@ -3,7 +3,7 @@
 //
 
 var currentImage = 0;
-let profile = [13,7]
+let profile = [10,10]
 var dogImages = new Array("dog.png","dog2.png","dog3.png","dog4.png");
 var catImages = new Array("cat.png","cat2.png","cat3.png","cat4.png");
 
