@@ -5,7 +5,10 @@
     <title>ThoGos</title>
     <link rel="shortcut icon" href="favlogo.png" type="image/png">
     <meta property="og:description" content="This is a Website for cool people">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.8.8/brython.js" integrity="sha256-rA89wPrTJJQFWJaZveKW8jpdmC3t5F9rRkPyBjz8G04=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.8.8/brython_stdlib.js" integrity="sha256-Gnrw9tIjrsXcZSCh/wos5Jrpn0bNVNFJuNJI9d71TDs=" crossorigin="anonymous"></script>
   </head>
+  
   <style>
 
   .centertext {
@@ -41,14 +44,23 @@
   }
 
   </style>
-  <body>
-    <h1 class="centertext">ThoGos</h1>
-    <p class="centertext">This is a paragraph</p>
 
-    <script src="index.js"> </script>
+  <body onload="brython()">
 
-    <button onclick="changeVar()" class="button centertext">Add one</button>
-    <button onclick="showAlert()" class ="centertext">Alert yourself</button>
+      <h1 class="centertext">ThoGos</h1>
+      <p class="centertext">This is a paragraph</p>
 
+      <script src="index.js"> </script>
+
+      <button onclick="changeVar()" class="button centertext">Add one</button>
+      <button onclick="showAlert()" class ="centertext">Alert yourself</button>
+
+      <script type="text/python" id="script1">
+        from browser import document, html
+        bruh = "lol"
+
+        document <= bruh
+        
+      </script>
   </body>
 </html>
