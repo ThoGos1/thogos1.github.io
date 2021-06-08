@@ -3,10 +3,9 @@
 <html>
   <head>
     <title>ThoGos</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" href="favlogo.png" type="image/png">
     <meta property="og:description" content="This is a Website for cool people">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.8.8/brython.js" integrity="sha256-rA89wPrTJJQFWJaZveKW8jpdmC3t5F9rRkPyBjz8G04=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.8.8/brython_stdlib.js" integrity="sha256-Gnrw9tIjrsXcZSCh/wos5Jrpn0bNVNFJuNJI9d71TDs=" crossorigin="anonymous"></script>
   </head>
   
   <style>
@@ -45,8 +44,14 @@
 
   </style>
 
-  <body onload="brython()">
-    
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <li><a href = "imgtens.html">Tensorflow Image Classify</a></li>
+        </ul>
+      </nav>
+    </header>
       <h1 class="centertext">ThoGos</h1>
       <p class="centertext">This is a paragraph</p>
 
@@ -54,13 +59,5 @@
 
       <button onclick="changeVar()" class="button centertext">Add one</button>
       <button onclick="showAlert()" class ="centertext">Alert yourself</button>
-
-      <script type="text/python" id="script1">
-        from browser import document, html
-        bruh = "lol"
-
-        document <= bruh
-        
-      </script>
   </body>
 </html>
