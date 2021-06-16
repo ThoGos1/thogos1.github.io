@@ -12,5 +12,22 @@
     <h1>Hotel, Trivago</h1>
     <p>This page is for using 2D Arrays to manage a hotel plan</p>
     <script type="text/javascript" src="hotarr.js"></script>
+    <input type="text" name="value" id="fillIn">
+    <input type="button" value="Submit" id="button">
+    
+    <p id="demo">Click Me Bruv</p>
+
+    <script>
+        document.getElementById("demo").onclick = function() {myFunction()};
+
+        function myFunction() 
+        {
+            document.getElementById("demo").innerHTML = arr[1][1];
+        }
+
+
+    </script>
+
+
   </body>
 </html>
