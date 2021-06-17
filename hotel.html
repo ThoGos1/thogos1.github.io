@@ -15,14 +15,19 @@
     <input type="text" name="value" id="fillIn">
     <input type="button" value="Submit" id="button">
     
-    <p id="demo">Click Me Bruv</p>
+    <p id="demo">Click to show floor-plan</p>
+    <p id="demo1">1st Floor</p>
+    <p id="demo2">2nd Floor</p>
+    <p id="demo3">3rd Floor</p>
 
     <script>
         document.getElementById("demo").onclick = function() {myFunction()};
 
         function myFunction() 
         {
-            document.getElementById("demo").innerHTML = arr[1][1];
+            document.getElementById("demo1").innerHTML = str;
+            document.getElementById("demo2").innerHTML = str1;
+            document.getElementById("demo3").innerHTML = str2;
         }
 
 
