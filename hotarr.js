@@ -42,7 +42,15 @@ for(var h = 0; h < arr.length; h++)
 
 
 
+//Add a sun-bed distribution page for the hotel simulation project you are doing.
 
+//Add a subpage, where you have a JavaScript script that has an array and then it takes a random number and picks a place from there.
+
+//You can also make a 2D which can be table logged in the console, for visuals , but not the actually used array, which is just 1D.
+
+//The array will then also be traversed through to see after any duplicates over and over until it finds an empty space.
+
+//You can also make the input thing in html and add a remove all button, for a new day.
 
 
 
