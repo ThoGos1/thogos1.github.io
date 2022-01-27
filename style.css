@@ -1,15 +1,5 @@
 body {
-    background: #eee;
+    background: rgb(255, 255, 255);
     font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-  }
-  
-  ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-  }
-  
-  li {
-    display: inline-block;
-    margin-right: 20px;
+    margin:0;
   }

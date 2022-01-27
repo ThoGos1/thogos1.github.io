@@ -1,25 +1,73 @@
 <!DOCTYPE html>
-
 <html>
-  <head>
-    <title>ThoGos</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" href="favlogo.png" type="image/png">
-    <meta property="og:description" content="This is a Website for cool people">
-  </head>
+<head>
+  <title>Thomas Gosvig | Biotech Student</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="shortcut icon" href="favlogo.png" type="image/png">
+  <meta property="og:description" content="This is a Website for cool people">
+<style>
 
-  <body>
-    <header>
-      <nav>
-        <ul>
-          <li><a href = "imgtens.html">Tensorflow Image Classify</a></li>
-          <li><a href = "vegan.html">Gulle the Vegan Bot</a></li>
-          <li><a href = "calc.html">Calculus Bot</a></li>
-          <li><a href = "hotel.html">Hotel Simulator</a></li>
-        </ul>
-      </nav>
-    </header>
-      <h1>ThoGos</h1>
-      <p>This website is for cool projects, which can all be found in the Navigation Menu above</p>
-  </body>
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover:not(.active) {
+  background-color: #111;
+}
+
+.active {
+  background-color: #07a8da;
+}
+
+.container {
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+</style>
+</head>
+<body>
+
+<ul>
+  <li><a class="active" href="index.html">Home</a></li>
+  <li><a href="imgtens.html">ML Image Classify</a></li>
+  <li><a href="calc.html">Calc Bot</a></li>
+  <li><a href="vegan.html">Vegan Bot</a></li>
+</ul>
+
+<div style="padding:20px;margin-top:30px;background-color:#ffffff;height:1500px;">
+
+  <img src="IMG-2270.jpg" alt="La Jolla" style="width:100%;">
+  <p>hello</p>
+
+</div>
+
+</body>
 </html>
