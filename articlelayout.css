@@ -1,0 +1,3 @@
+article {
+    width: clamp(200px, 50%, 600px);
+}

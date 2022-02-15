@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Flex test</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="shortcut icon" href="images/favlogo.png" type="image/png">
+        <meta property="og:description" content="This is a Website for cool people">
+
+        <style>
+            /* This is how to have variables in CSS*/
+            :root {
+                --r: 255;
+                --g: 0;
+                --b: 0;
+                --txt-color: rgb(var(--r),var(--g),var(--b))
+            }
+            /* flex is only good for single columns/rows */
+            .flex {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            /* grids can be used for multiple columns, and the pixel count for rows just means how many rows, so adding another value so 100px 200px 400px will just add another row.*/
+            /* 'fr' is almost like a placeholder that just says that there should be space or something */
+            .grid {
+                display: grid;
+                grid-template-columns: 600px 1fr 660px;
+                grid-template-rows: 300px 100px 100px;
+                place-items: center;
+                margin-top: 120px;
+                margin-left: 20px;
+                margin-right: 20px;
+            }
+
+            .grid2 {
+                display: grid;
+                grid-template-columns: 100%;
+                grid-template-rows: 300px 190px;
+                place-items: center;
+            }
+
+            h2 {
+                font-weight: bold;
+                font-size: 50px;
+                margin-top: 0px;
+                margin-bottom: 0px;
+            } 
+
+            .groupbox {
+                border-radius: 10px;
+                box-shadow: 0 3px 10px rgb(0 0 0 / 50%);
+            }
+
+            .txtbox {
+                width: 151%;
+                background-color: whitesmoke;
+                padding: 20px;
+                margin-left: auto;
+                margin-top: -180px;
+            }
+
+            .imgbox {
+                width: 110%;
+                margin-right: 100px;
+                margin-top: 50px;
+                margin-left: -40px;
+            }
+
+            ul {
+                position: fixed;
+                top: 0;
+                width: 100%;
+                list-style-type: none;
+                background-color: #f2f2f2;
+                margin: 0;
+                padding: 0;
+            }
+
+            li {
+                float: left;
+                padding: 15px 16px;
+            }
+
+            a {
+                text-decoration: none;
+                color: black;
+            }
+
+        </style>
+
+    </head>
+
+    <!-- Seperator between Head and Body -->
+
+    <body>
+
+        <ul>
+            <img src="images/me.jpg" alt="Avatar" style="width:42px; border-radius: 50%; float: left; padding-top: 4px; padding-left: 4px; padding-right: 4px;">
+            <p style="float: left; font-weight: bold;">Thomas Gosvig</p>
+            <div style="margin-left: 40%;">
+                <li><a class="active" href="#home">Home</a></li>
+                <li><a href="#news">News</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#about">About</a></li>
+            </div>
+        </ul>
+
+        <div class="grid2">
+            <img src="images/IMG-2270.jpg" style="width: 100%; margin-top: 230px;">
+            <h2 style="top:0; left:0; margin-bottom: 250px; color: white; font-size: 70px;">Hi or Halløjsa,<br>I am Thomas!</h2>
+        </div>
+
+        <div class="grid">
+            <div class="groupbox txtbox">
+                <h2>About Me:</h2>
+                <p style="line-height: 1.4">My name is Thomas Gosvig and I'm currently an undergraduate at UC San Diego majoring in Biochemistry and graduating in 2025. Even though I study Chemistry, I'm very passionate about Computer Science and Engineering and have been taking courses since 8th grade.<br>I was born and grew up in Denmark, but for my last two years in high school I moved to the U.S. and continued into college.<br>In middle school I started my computer science 'career' with Swift and Xcode and created an app for the App Store. Then in high school I learned Python in both Denmark and the U.S. and then Java only in the U.S.<br>However right now I'm not currently taking any courses in CS, but I'm getting back into Swift and App Development, and trying to learn javaScript too.</p>
+            </div>
+            <p><br></p>
+            <img class="groupbox imgbox" src="images/IMG-0777.jpg">
+        </div>
+        
+        <p>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello<br>hello</p>
+
+
+    </body>
+</html>
