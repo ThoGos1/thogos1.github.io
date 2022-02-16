@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h3>A demonstration of how to access a Text Field</h3>
+
+<input type="number" id="hydrogen" value="">
+
+<p>Click the "Try it" button to get the text in the text field.</p>
+
+<button onclick="myFunction()">Try it</button>
+
+<p id="demo"></p>
+
+<script>
+function myFunction() {
+  var x = document.getElementById("hydrogen").value;
+
+  let hydromol = x/18.04;
+
+  document.getElementById("demo").innerHTML = hydromol + " moles of H";
+}
+</script>
+
+</body>
+</html>
