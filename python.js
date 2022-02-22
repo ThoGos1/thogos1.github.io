@@ -3,7 +3,28 @@ async function main(){
       indexURL : "https://cdn.jsdelivr.net/pyodide/v0.19.0/full/"
     });
 
-    console.log(pyodide.runPython('print("hello world")'));
+
+
+    async function fetchText() {
+        
+        
+        
+        
+        let response = await fetch('javapy.py', {mode:'no-cors'});
+        let x = await response.text();
+        pyodide.runPython(String(x));
+    
+        let y = pyodide.globals.get('num');
+        console.log("tester " + String(y));
+    
+        document.getElementById('pyvar').innerHTML = y;
+    
+        console.log(poop);
+    
+        console.log('sui' + hydg);
+    }
+    
+    fetchText();
 
 
 
@@ -13,6 +34,5 @@ async function main(){
 
 
 
-
-  }
+}    
 main();
