@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Combustion Solver</title>
+        <script src="https://cdn.jsdelivr.net/pyodide/v0.19.1/full/pyodide.js"></script>
+        <link rel="stylesheet" href="styles/style.css">
+        <link rel="stylesheet" href="styles/stylestack.css">
+        <link rel="shortcut icon" href="images/favlogo.png" type="image/png">
+    </head>
+
+    <body>
+
+        <h1>pyodide</h1>
+        <p>Pyodide is for python like numpy and stuff</p>
+
+        <input type="number" id="code" value="1"/>
+        <button onclick="evaluatePython(parseFloat(document.getElementById('code').value))">Run</button>
+
+        <p id="pyvar"></p>
+
+
+
+
+
+
+
+
+        <script>
+            const code = document.getElementById("code");
+            const hg = parseFloat(code.value);
+
+            // inititializes Pyodide for use:
+            async function main() {
+                let pyodide = await loadPyodide({
+                indexURL: "https://cdn.jsdelivr.net/pyodide/v0.19.1/full/",
+                });
+                return pyodide;
+            }
+            let pyodideReadyPromise = main();
+
+            // Does the python from external python file:
+            async function evaluatePython(newH) {
+                let pyodide = await pyodideReadyPromise;
+
+                pyodide.globals.set("inh", newH);
+                console.log('pyodide works if this is x+5: ' + pyodide.runPython(`inh+5`));
+
+                let response = await fetch('HCcombust.py', {mode:'no-cors'});
+                let x = await response.text();
+                pyodide.runPython(String(x));
+                console.log('moles of Hydrogen: ' + hmolv);
+
+                if(hmolv < 0)
+                {
+                    document.getElementById('pyvar').innerHTML = 'Moles has to positive';
+                }
+                else {
+                    document.getElementById('pyvar').innerHTML = 'Moles of Hydrogen: '+ hmolv;
+                }
+
+            }
+
+        </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </body>
+</html>

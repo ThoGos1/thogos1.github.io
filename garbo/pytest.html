@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/pyodide/v0.19.0/full/pyodide.js"></script>
+        <link rel="stylesheet" href="styles/style.css">
+        <link rel="stylesheet" href="styles/stylestack.css">
+        <link rel="shortcut icon" href="images/favlogo.png" type="image/png">
+    </head>
+
+    <body>
+        <h1>pyodide</h1>
+        <p>Pyodide is for python like numpy and stuff</p>
+        <p id="pyvar"></p>
+
+
+
+
+
+
+        <script type="text/javascript">
+
+            var hg;
+
+            function chg(val) {
+                hg = val;
+            }
+
+            function clhg() {
+                console.log(hg);
+            }
+
+            async function main(){
+                let pyodide = await loadPyodide({
+                indexURL : "https://cdn.jsdelivr.net/pyodide/v0.19.0/full/"
+                });
+
+                let response = await fetch('javapy.py', {mode:'no-cors'});
+                let x = await response.text();
+                pyodide.runPython(String(x));
+    
+                let y = pyodide.globals.get('num');
+                console.log("tester " + String(y));
+    
+                document.getElementById('pyvar').innerHTML = y;
+
+                console.log('from pyt: ' + poop);
+
+                function getPoop(){
+                    console.log('nested: ' + poop);
+                }
+    
+            }    
+            
+        </script>
+
+
+
+
+
+
+        <h3>A demonstration of how to access a Text Field</h3>
+
+        <input type="number" id="hy" value="">
+
+        <p>Click the "Try it" button to get the text in the text field.</p>
+
+        <button onclick="main()">Try it</button>
+
+        <p id="demo"></p>
+        
+    </body>
+</html>
