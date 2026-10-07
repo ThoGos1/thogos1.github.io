@@ -1,110 +1,123 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Kana Crush – Hiragana Match-3</title>
-<style>
-:root{--bg:#eceeff;--card:#fff;--ink:#23213f;--mut:#6d6a93;--pri:#ff4f81;--sh:0 3px 0 rgba(35,33,63,.14);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1833;--card:#2b2852;--ink:#f3f1ff;--mut:#aaa6d6}}
-:root[data-theme="dark"]{--bg:#1a1833;--card:#2b2852;--ink:#f3f1ff;--mut:#aaa6d6}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-html,body{height:100%;margin:0}
-body{background:var(--bg);color:var(--ink);font-family:-apple-system,"Hiragino Maru Gothic ProN","Hiragino Sans","Yu Gothic",system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;overflow:hidden;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
-button{font:inherit;font-weight:700;border:0;border-radius:14px;padding:9px 13px;background:var(--card);color:var(--ink);box-shadow:var(--sh)}
-button:disabled{opacity:.35}
-header,footer{width:calc(100% - 16px);max-width:440px;display:flex;align-items:center;gap:8px}
-header{padding:8px 0 2px}
-footer{justify-content:space-between;padding:8px 0 10px;font-weight:700}
-#obj{flex:1;display:flex;gap:8px;justify-content:center}
-.g{background:var(--card);border-radius:14px;padding:4px 14px;font-weight:800;box-shadow:var(--sh);display:flex;flex-direction:column;align-items:center;line-height:1.15;font-size:22px;min-width:64px}
-.g i{font:600 11px/1.2 system-ui;color:var(--mut)}
-.g.ok{background:#b8f0c8;color:#17472a}.g.ok i{color:#17472a}
-#mv{font-weight:800;min-width:72px;text-align:right}
-#cap{height:26px;line-height:26px;font-weight:700;color:var(--mut);font-size:15px;white-space:nowrap}
-main{flex:1;display:flex;align-items:center}
-#board{--w:min(calc(100vw - 16px),calc((100dvh - 230px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))*7/8),440px);width:var(--w);height:calc(var(--w)*8/7);display:grid;grid-template-columns:repeat(7,1fr);grid-template-rows:repeat(8,1fr);gap:3px;touch-action:none}
-.c{position:relative;border-radius:26%;display:flex;align-items:center;justify-content:center;font-size:calc(var(--w)/7*.55);font-weight:700;color:#2a1b2e;box-shadow:inset 0 -4px 0 rgba(0,0,0,.15),inset 0 3px 0 rgba(255,255,255,.55)}
-.l2{font-size:calc(var(--w)/7*.4)}
-.sel{outline:3px solid var(--pri);transform:scale(1.08);z-index:2}
-.pop{animation:pop .22s forwards}@keyframes pop{to{transform:scale(0);opacity:0}}
-.drop{animation:drop .3s ease-out}@keyframes drop{from{transform:translateY(var(--dy))}}
-.rom .c::after{content:attr(data-r);position:absolute;bottom:1px;font-size:11px;font-weight:800;background:rgba(255,255,255,.8);border-radius:6px;padding:0 4px}
-#ov{position:fixed;inset:0;background:rgba(20,16,50,.6);display:flex;align-items:center;justify-content:center;padding:calc(12px + env(safe-area-inset-top,0px)) 12px calc(12px + env(safe-area-inset-bottom,0px));z-index:9}
-#ov[hidden]{display:none}
-.card{background:var(--card);border-radius:26px;padding:18px;max-width:420px;width:100%;max-height:100%;overflow:auto;text-align:center;box-sizing:border-box}
-.card h1{margin:0;font-size:34px;color:var(--pri)}.card h2{margin:0 0 4px}.card p{color:var(--mut);margin:6px 0}
-.card>button{display:block;width:100%;margin:8px 0;padding:13px;font-size:17px;background:var(--bg)}
-.card>button.p{background:var(--pri);color:#fff}
-.k{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:10px 0}
-.k div{background:var(--bg);border-radius:12px;padding:4px 0}.k b{display:block;font-size:26px}.k small{color:var(--mut);font-weight:700}
-.m{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
-.m button{background:var(--bg);padding:8px 2px}.m b{display:block;font-size:24px}.m small{font-size:10px;color:var(--mut)}
-</style></head><body>
-<header><button id="menu">☰</button><div id="obj"></div><div id="mv"></div></header>
-<div id="cap"></div>
-<main><div id="board"></div></main>
-<footer><button id="pk"></button><div>Score <b id="sc">0</b></div></footer>
-<div id="ov" hidden></div>
-<script>
-const $=s=>document.querySelector(s),W=7,H=8,sleep=t=>new Promise(r=>setTimeout(r,t)),
-sh=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
-const S=['あ a い i う u え e お o','か ka き ki く ku け ke こ ko','さ sa し shi す su せ se そ so','た ta ち chi つ tsu て te と to','な na に ni ぬ nu ね ne の no','は ha ひ hi ふ fu へ he ほ ho','ま ma み mi む mu め me も mo','や ya ゆ yu よ yo わ wa を wo ん n','ら ra り ri る ru れ re ろ ro',
-'が ga ぎ gi ぐ gu げ ge ご go','ざ za じ ji ず zu ぜ ze ぞ zo','だ da ぢ ji づ zu で de ど do','ば ba び bi ぶ bu べ be ぼ bo','ぱ pa ぴ pi ぷ pu ぺ pe ぽ po',
-'きゃ kya きゅ kyu きょ kyo しゃ sha しゅ shu しょ sho ちゃ cha ちゅ chu ちょ cho','にゃ nya にゅ nyu にょ nyo ひゃ hya ひゅ hyu ひょ hyo みゃ mya みゅ myu みょ myo','りゃ rya りゅ ryu りょ ryo ぎゃ gya ぎゅ gyu ぎょ gyo じゃ ja じゅ ju じょ jo','びゃ bya びゅ byu びょ byo ぴゃ pya ぴゅ pyu ぴょ pyo'];
-const NM=['Vowels','K','S','T','N','H','M','Y W N','R','G','Z','D','B','P','KY SH CH','NY HY MY','RY GY J','BY PY'];
-const P=S.map(s=>{const a=s.split(' '),o=[];for(let i=0;i<a.length;i+=2)o.push({k:a[i],r:a[i+1]});return o});
-let un=0,best=0;try{un=+localStorage.kcU||0;best=+localStorage.kcB||0}catch(e){}
-const sv=()=>{try{localStorage.kcU=un;localStorage.kcB=best}catch(e){}};
-let lv,ty,g,mv,sc,goals,need,pk,busy=1,sel=-1,si=-1,sx,sy;
-const board=$('#board'),ov=$('#ov'),cells=[];
-for(let i=0;i<W*H;i++){const c=document.createElement('div');c.dataset.i=i;board.append(c);cells.push(c)}
-const rnd=()=>Math.random()*ty.length|0;
-const cards=p=>`<div class="k">${p.map(x=>`<div><b>${x.k}</b><small>${x.r}</small></div>`).join('')}</div>`;
-const show=h=>{ov.innerHTML=`<div class="card">${h}</div>`;ov.hidden=false};
-function find(){const s=new Set();for(let y=0;y<H;y++)for(let x=0;x<W;x++){const i=y*W+x,t=g[i];if(t<0)continue;
- if(x<W-2&&g[i+1]==t&&g[i+2]==t)s.add(i).add(i+1).add(i+2);
- if(y<H-2&&g[i+W]==t&&g[i+2*W]==t)s.add(i).add(i+W).add(i+2*W)}return s}
-function has(){for(let i=0;i<W*H;i++)for(const j of[i+1,i+W]){if(j>=W*H||(j==i+1&&j%W==0))continue;[g[i],g[j]]=[g[j],g[i]];const f=find().size;[g[i],g[j]]=[g[j],g[i]];if(f)return 1}return 0}
-function draw(f){cells.forEach((c,i)=>{const t=ty[g[i]];c.className='c'+(t.k.length>1?' l2':'');c.style.background=`hsl(${t.h} 85% 80%)`;c.textContent=t.k;c.dataset.r=t.r});
- if(f){void board.offsetWidth;cells.forEach((c,i)=>{if(f[i]){c.style.setProperty('--dy',-f[i]*105+'%');c.classList.add('drop')}})}}
-function hud(){$('#mv').textContent='Moves '+mv;$('#sc').textContent=sc;$('#pk').textContent='👁 Peek '+pk;
- $('#obj').innerHTML=goals.map(x=>{const d=x.n>=need;return`<div class="g${d?' ok':''}">${d?x.k:x.r}<i>${Math.min(x.n,need)}/${need}</i></div>`}).join('')}
-async function swap(a,b){const A=cells[a],B=cells[b],dx=(b%W-a%W)*100,dy=((b/W|0)-(a/W|0))*100;
- A.style.transition=B.style.transition='transform .15s';A.style.transform=`translate(${dx}%,${dy}%)`;B.style.transform=`translate(${-dx}%,${-dy}%)`;await sleep(165);
- A.style.transition=B.style.transition=A.style.transform=B.style.transform='';[g[a],g[b]]=[g[b],g[a]];draw()}
-async function resolve(){let cb=0;for(;;){const m=find();if(!m.size)break;cb++;const seen=new Set();
- m.forEach(i=>{const t=ty[g[i]];seen.add(t);cells[i].classList.add('pop');const q=goals.find(x=>x.r==t.r);if(q)q.n++});
- sc+=m.size*10*cb;$('#cap').textContent=[...seen].slice(0,3).map(t=>t.k+' = '+t.r).join('    ')+(cb>1?'   🔥x'+cb:'');hud();
- await sleep(230);m.forEach(i=>g[i]=-1);const f=[];
- for(let x=0;x<W;x++){let w=H-1;for(let y=H-1;y>=0;y--){const v=g[y*W+x];if(v>=0){if(w!=y){g[w*W+x]=v;f[w*W+x]=w-y}w--}}for(;w>=0;w--){g[w*W+x]=rnd();f[w*W+x]=w+1}}
- draw(f);await sleep(330)}}
-function unsel(){if(sel>=0)cells[sel].classList.remove('sel');sel=-1}
-async function tr(a,b){busy=1;unsel();await swap(a,b);if(!find().size){await swap(a,b);busy=0;return}mv--;hud();await resolve();busy=0;end()}
-function end(){if(goals.every(x=>x.n>=need))win();else if(mv<=0)lose();
- else if(!has()){$('#cap').textContent='No moves left — shuffling!';do{g=sh(g)}while(find().size||!has());draw()}}
-function win(){const last=lv==P.length-1;if(lv+1>un&&!last)un=lv+1;best=Math.max(best,sc);sv();
- show(`<h2>${last?'🎉 You cleared all of hiragana!':'Stage clear! 🌸'}</h2><p>Score ${sc}</p>${cards(P[lv])}`+(last?'':'<button class="p" data-a="next">Next stage ▶</button>')+'<button data-a="menu">All stages</button>')}
-function lose(){show(`<h2>Out of moves</h2><p>Read these once more, then go again.</p>${cards(P[lv])}<button class="p" data-a="retry">Try again</button><button data-a="menu">All stages</button>`)}
-function menu(){show(`<h1>かな Crush</h1><p>Match 3 kana, learn hiragana. Best score: ${best}</p><div class="m">${P.map((p,i)=>`<button ${i>un?'disabled':''} data-a="intro" data-i="${i}"><b>${p[0].k}</b><small>${i+1}. ${NM[i]}</small></button>`).join('')}</div>`)}
-function intro(i){show(`<h2>Stage ${i+1}: ${NM[i]}</h2>${cards(P[i])}<p>The top bar shows only the <b>sound</b> you need. Find its kana and match three. Stuck? Tap 👁 Peek.</p><button class="p" data-a="go" data-i="${i}">Start</button><button data-a="menu">Back</button>`)}
-function start(i){lv=i;const p=P[i],used=new Set(p.map(x=>x.r));let t=sh(p).slice(0,6);
- if(t.length<6&&i){const o=sh(P.slice(0,i).flat().filter(x=>!used.has(x.r)));if(o.length)t.push(o[0])}
- const hu=sh([350,28,52,140,200,280]);ty=t.map((x,j)=>({...x,h:hu[j]}));
- goals=sh(ty.filter(x=>p.some(q=>q.k==x.k))).slice(0,2).map(x=>({r:x.r,k:x.k,n:0}));
- need=8+(i>>2);mv=22;sc=0;pk=3;
- do{g=[];for(let j=0;j<W*H;j++){let v;do v=rnd();while(j%W>1&&g[j-1]==v&&g[j-2]==v||j>=2*W&&g[j-W]==v&&g[j-2*W]==v);g[j]=v}}while(!has());
- ov.hidden=true;busy=0;draw();hud();$('#cap').textContent='Swap tiles to match 3 of the same kana'}
-ov.onclick=e=>{const b=e.target.closest('button');if(!b||b.disabled)return;const a=b.dataset.a,i=+b.dataset.i;
- if(a=='intro')intro(i);else if(a=='go')start(i);else if(a=='menu')menu();else if(a=='next')intro(lv+1);else if(a=='retry')start(lv)};
-$('#menu').onclick=()=>{if(!busy)menu()};
-$('#pk').onclick=()=>{if(busy||pk<1)return;pk--;hud();board.classList.add('rom');setTimeout(()=>board.classList.remove('rom'),3000)};
-board.onpointerdown=e=>{const c=e.target.closest('.c');if(busy||!c)return;si=+c.dataset.i;sx=e.clientX;sy=e.clientY};
-board.onpointermove=e=>{if(si<0||busy)return;const dx=e.clientX-sx,dy=e.clientY-sy;if(Math.hypot(dx,dy)<16)return;
- const s=si,x=s%W,y=s/W|0;si=-1;let nx=x,ny=y;if(Math.abs(dx)>Math.abs(dy))nx+=dx>0?1:-1;else ny+=dy>0?1:-1;
- if(nx<0||nx>=W||ny<0||ny>=H)return;tr(s,ny*W+nx)};
-board.onpointerup=()=>{if(si<0)return;const i=si;si=-1;if(busy)return;
- if(i==sel){unsel();return}
- const d=Math.abs(sel-i);if(sel>=0&&(d==W||d==1&&(sel/W|0)==(i/W|0))){tr(sel,i);return}
- unsel();sel=i;cells[i].classList.add('sel')};
-board.onpointercancel=()=>{si=-1};
-start(0);menu();
-</script></body></html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <title>Kana Crush</title>
+        <style>
+            :root{--bg:#eceeff;--card:#fff;--ink:#23213f;--mut:#6d6a93;--pri:#ff4f81;--sh:0 3px 0 rgba(35,33,63,.14);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+            @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1833;--card:#2b2852;--ink:#f3f1ff;--mut:#aaa6d6}}
+            :root[data-theme="dark"]{--bg:#1a1833;--card:#2b2852;--ink:#f3f1ff;--mut:#aaa6d6}
+            html{scroll-padding-top:env(safe-area-inset-top,0px)}
+            html,body{height:100%;margin:0}
+            body{background:var(--bg);color:var(--ink);font-family:-apple-system,"Hiragino Maru Gothic ProN","Hiragino Sans","Yu Gothic",system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;overflow:hidden;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+            button{font:inherit;font-weight:700;border:0;border-radius:14px;padding:9px 13px;background:var(--card);color:var(--ink);box-shadow:var(--sh)}
+            button:disabled{opacity:.35}
+            header,footer{width:calc(100% - 16px);max-width:440px;display:flex;align-items:center;gap:8px}
+            header{padding:8px 0 2px}
+            footer{justify-content:space-between;padding:8px 0 10px;font-weight:700}
+            #obj{flex:1;display:flex;gap:8px;justify-content:center}
+            .g{background:var(--card);border-radius:14px;padding:4px 14px;font-weight:800;box-shadow:var(--sh);display:flex;flex-direction:column;align-items:center;line-height:1.15;font-size:22px;min-width:64px}
+            .g i{font:600 11px/1.2 system-ui;color:var(--mut)}
+            .g.ok{background:#b8f0c8;color:#17472a}.g.ok i{color:#17472a}
+            #mv{font-weight:800;min-width:72px;text-align:right}
+            #cap{height:26px;line-height:26px;font-weight:700;color:var(--mut);font-size:15px;white-space:nowrap}
+            main{flex:1;display:flex;align-items:center}
+            #board{--w:min(calc(100vw - 16px),calc((100dvh - 230px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))*7/8),440px);width:var(--w);height:calc(var(--w)*8/7);display:grid;grid-template-columns:repeat(7,1fr);grid-template-rows:repeat(8,1fr);gap:3px;touch-action:none}
+            .c{position:relative;border-radius:26%;display:flex;align-items:center;justify-content:center;font-size:calc(var(--w)/7*.55);font-weight:700;color:#2a1b2e;box-shadow:inset 0 -4px 0 rgba(0,0,0,.15),inset 0 3px 0 rgba(255,255,255,.55)}
+            .l2{font-size:calc(var(--w)/7*.4)}
+            .sel{outline:3px solid var(--pri);transform:scale(1.08);z-index:2}
+            .pop{animation:pop .22s forwards}@keyframes pop{to{transform:scale(0);opacity:0}}
+            .drop{animation:drop .3s ease-out}@keyframes drop{from{transform:translateY(var(--dy))}}
+            .rom .c::after{content:attr(data-r);position:absolute;bottom:1px;font-size:11px;font-weight:800;background:rgba(255,255,255,.8);border-radius:6px;padding:0 4px}
+            #ov{position:fixed;inset:0;background:rgba(20,16,50,.6);display:flex;align-items:center;justify-content:center;padding:calc(12px + env(safe-area-inset-top,0px)) 12px calc(12px + env(safe-area-inset-bottom,0px));z-index:9}
+            #ov[hidden]{display:none}
+            .card{background:var(--card);border-radius:26px;padding:18px;max-width:420px;width:100%;max-height:100%;overflow:auto;text-align:center;box-sizing:border-box}
+            .card h1{margin:0;font-size:34px;color:var(--pri)}.card h2{margin:0 0 4px}.card p{color:var(--mut);margin:6px 0}
+            .card>button{display:block;width:100%;margin:8px 0;padding:13px;font-size:17px;background:var(--bg)}
+            .card>button.p{background:var(--pri);color:#fff}
+            .k{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:10px 0}
+            .k div{background:var(--bg);border-radius:12px;padding:4px 0}.k b{display:block;font-size:26px}.k small{color:var(--mut);font-weight:700}
+            .m{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+            .m button{background:var(--bg);padding:8px 2px}.m b{display:block;font-size:24px}.m small{font-size:10px;color:var(--mut)}
+        </style>
+    </head>
+        <body>
+            <header>
+                <button id="menu">☰</button><div id="obj"></div><div id="mv"></div>
+            </header>
+            <div id="cap"></div>
+            <main>
+                <div id="board"></div>
+            </main>
+            <footer>
+                <button id="pk"></button>
+                <div>Score <b id="sc">0</b></div>
+            </footer>
+            <div id="ov" hidden></div>
+            <script>
+                const $=s=>document.querySelector(s),W=7,H=8,sleep=t=>new Promise(r=>setTimeout(r,t)),
+                sh=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
+                const S=['あ a い i う u え e お o','か ka き ki く ku け ke こ ko','さ sa し shi す su せ se そ so','た ta ち chi つ tsu て te と to','な na に ni ぬ nu ね ne の no','は ha ひ hi ふ fu へ he ほ ho','ま ma み mi む mu め me も mo','や ya ゆ yu よ yo わ wa を wo ん n','ら ra り ri る ru れ re ろ ro',
+                'が ga ぎ gi ぐ gu げ ge ご go','ざ za じ ji ず zu ぜ ze ぞ zo','だ da ぢ ji づ zu で de ど do','ば ba び bi ぶ bu べ be ぼ bo','ぱ pa ぴ pi ぷ pu ぺ pe ぽ po',
+                'きゃ kya きゅ kyu きょ kyo しゃ sha しゅ shu しょ sho ちゃ cha ちゅ chu ちょ cho','にゃ nya にゅ nyu にょ nyo ひゃ hya ひゅ hyu ひょ hyo みゃ mya みゅ myu みょ myo','りゃ rya りゅ ryu りょ ryo ぎゃ gya ぎゅ gyu ぎょ gyo じゃ ja じゅ ju じょ jo','びゃ bya びゅ byu びょ byo ぴゃ pya ぴゅ pyu ぴょ pyo'];
+                const NM=['Vowels','K','S','T','N','H','M','Y W N','R','G','Z','D','B','P','KY SH CH','NY HY MY','RY GY J','BY PY'];
+                const P=S.map(s=>{const a=s.split(' '),o=[];for(let i=0;i<a.length;i+=2)o.push({k:a[i],r:a[i+1]});return o});
+                let un=0,best=0;try{un=+localStorage.kcU||0;best=+localStorage.kcB||0}catch(e){}
+                const sv=()=>{try{localStorage.kcU=un;localStorage.kcB=best}catch(e){}};
+                let lv,ty,g,mv,sc,goals,need,pk,busy=1,sel=-1,si=-1,sx,sy;
+                const board=$('#board'),ov=$('#ov'),cells=[];
+                for(let i=0;i<W*H;i++){const c=document.createElement('div');c.dataset.i=i;board.append(c);cells.push(c)}
+                const rnd=()=>Math.random()*ty.length|0;
+                const cards=p=>`<div class="k">${p.map(x=>`<div><b>${x.k}</b><small>${x.r}</small></div>`).join('')}</div>`;
+                const show=h=>{ov.innerHTML=`<div class="card">${h}</div>`;ov.hidden=false};
+                function find(){const s=new Set();for(let y=0;y<H;y++)for(let x=0;x<W;x++){const i=y*W+x,t=g[i];if(t<0)continue;
+                if(x<W-2&&g[i+1]==t&&g[i+2]==t)s.add(i).add(i+1).add(i+2);
+                if(y<H-2&&g[i+W]==t&&g[i+2*W]==t)s.add(i).add(i+W).add(i+2*W)}return s}
+                function has(){for(let i=0;i<W*H;i++)for(const j of[i+1,i+W]){if(j>=W*H||(j==i+1&&j%W==0))continue;[g[i],g[j]]=[g[j],g[i]];const f=find().size;[g[i],g[j]]=[g[j],g[i]];if(f)return 1}return 0}
+                function draw(f){cells.forEach((c,i)=>{const t=ty[g[i]];c.className='c'+(t.k.length>1?' l2':'');c.style.background=`hsl(${t.h} 85% 80%)`;c.textContent=t.k;c.dataset.r=t.r});
+                if(f){void board.offsetWidth;cells.forEach((c,i)=>{if(f[i]){c.style.setProperty('--dy',-f[i]*105+'%');c.classList.add('drop')}})}}
+                function hud(){$('#mv').textContent='Moves '+mv;$('#sc').textContent=sc;$('#pk').textContent='👁 Peek '+pk;
+                $('#obj').innerHTML=goals.map(x=>{const d=x.n>=need;return`<div class="g${d?' ok':''}">${d?x.k:x.r}<i>${Math.min(x.n,need)}/${need}</i></div>`}).join('')}
+                async function swap(a,b){const A=cells[a],B=cells[b],dx=(b%W-a%W)*100,dy=((b/W|0)-(a/W|0))*100;
+                A.style.transition=B.style.transition='transform .15s';A.style.transform=`translate(${dx}%,${dy}%)`;B.style.transform=`translate(${-dx}%,${-dy}%)`;await sleep(165);
+                A.style.transition=B.style.transition=A.style.transform=B.style.transform='';[g[a],g[b]]=[g[b],g[a]];draw()}
+                async function resolve(){let cb=0;for(;;){const m=find();if(!m.size)break;cb++;const seen=new Set();
+                m.forEach(i=>{const t=ty[g[i]];seen.add(t);cells[i].classList.add('pop');const q=goals.find(x=>x.r==t.r);if(q)q.n++});
+                sc+=m.size*10*cb;$('#cap').textContent=[...seen].slice(0,3).map(t=>t.k+' = '+t.r).join('    ')+(cb>1?'   🔥x'+cb:'');hud();
+                await sleep(230);m.forEach(i=>g[i]=-1);const f=[];
+                for(let x=0;x<W;x++){let w=H-1;for(let y=H-1;y>=0;y--){const v=g[y*W+x];if(v>=0){if(w!=y){g[w*W+x]=v;f[w*W+x]=w-y}w--}}for(;w>=0;w--){g[w*W+x]=rnd();f[w*W+x]=w+1}}
+                draw(f);await sleep(330)}}
+                function unsel(){if(sel>=0)cells[sel].classList.remove('sel');sel=-1}
+                async function tr(a,b){busy=1;unsel();await swap(a,b);if(!find().size){await swap(a,b);busy=0;return}mv--;hud();await resolve();busy=0;end()}
+                function end(){if(goals.every(x=>x.n>=need))win();else if(mv<=0)lose();
+                else if(!has()){$('#cap').textContent='No moves left — shuffling!';do{g=sh(g)}while(find().size||!has());draw()}}
+                function win(){const last=lv==P.length-1;if(lv+1>un&&!last)un=lv+1;best=Math.max(best,sc);sv();
+                show(`<h2>${last?'🎉 You cleared all of hiragana!':'Stage clear! 🌸'}</h2><p>Score ${sc}</p>${cards(P[lv])}`+(last?'':'<button class="p" data-a="next">Next stage ▶</button>')+'<button data-a="menu">All stages</button>')}
+                function lose(){show(`<h2>Out of moves</h2><p>Read these once more, then go again.</p>${cards(P[lv])}<button class="p" data-a="retry">Try again</button><button data-a="menu">All stages</button>`)}
+                function menu(){show(`<h1>かな Crush</h1><p>Match 3 kana, learn hiragana. Best score: ${best}</p><div class="m">${P.map((p,i)=>`<button ${i>un?'disabled':''} data-a="intro" data-i="${i}"><b>${p[0].k}</b><small>${i+1}. ${NM[i]}</small></button>`).join('')}</div>`)}
+                function intro(i){show(`<h2>Stage ${i+1}: ${NM[i]}</h2>${cards(P[i])}<p>The top bar shows only the <b>sound</b> you need. Find its kana and match three. Stuck? Tap 👁 Peek.</p><button class="p" data-a="go" data-i="${i}">Start</button><button data-a="menu">Back</button>`)}
+                function start(i){lv=i;const p=P[i],used=new Set(p.map(x=>x.r));let t=sh(p).slice(0,6);
+                if(t.length<6&&i){const o=sh(P.slice(0,i).flat().filter(x=>!used.has(x.r)));if(o.length)t.push(o[0])}
+                const hu=sh([350,28,52,140,200,280]);ty=t.map((x,j)=>({...x,h:hu[j]}));
+                goals=sh(ty.filter(x=>p.some(q=>q.k==x.k))).slice(0,2).map(x=>({r:x.r,k:x.k,n:0}));
+                need=8+(i>>2);mv=22;sc=0;pk=3;
+                do{g=[];for(let j=0;j<W*H;j++){let v;do v=rnd();while(j%W>1&&g[j-1]==v&&g[j-2]==v||j>=2*W&&g[j-W]==v&&g[j-2*W]==v);g[j]=v}}while(!has());
+                ov.hidden=true;busy=0;draw();hud();$('#cap').textContent='Swap tiles to match 3 of the same kana'}
+                ov.onclick=e=>{const b=e.target.closest('button');if(!b||b.disabled)return;const a=b.dataset.a,i=+b.dataset.i;
+                if(a=='intro')intro(i);else if(a=='go')start(i);else if(a=='menu')menu();else if(a=='next')intro(lv+1);else if(a=='retry')start(lv)};
+                $('#menu').onclick=()=>{if(!busy)menu()};
+                $('#pk').onclick=()=>{if(busy||pk<1)return;pk--;hud();board.classList.add('rom');setTimeout(()=>board.classList.remove('rom'),3000)};
+                board.onpointerdown=e=>{const c=e.target.closest('.c');if(busy||!c)return;si=+c.dataset.i;sx=e.clientX;sy=e.clientY};
+                board.onpointermove=e=>{if(si<0||busy)return;const dx=e.clientX-sx,dy=e.clientY-sy;if(Math.hypot(dx,dy)<16)return;
+                const s=si,x=s%W,y=s/W|0;si=-1;let nx=x,ny=y;if(Math.abs(dx)>Math.abs(dy))nx+=dx>0?1:-1;else ny+=dy>0?1:-1;
+                if(nx<0||nx>=W||ny<0||ny>=H)return;tr(s,ny*W+nx)};
+                board.onpointerup=()=>{if(si<0)return;const i=si;si=-1;if(busy)return;
+                if(i==sel){unsel();return}
+                const d=Math.abs(sel-i);if(sel>=0&&(d==W||d==1&&(sel/W|0)==(i/W|0))){tr(sel,i);return}
+                unsel();sel=i;cells[i].classList.add('sel')};
+                board.onpointercancel=()=>{si=-1};
+                start(0);menu();
+            </script>
+        </body>
+</html>
