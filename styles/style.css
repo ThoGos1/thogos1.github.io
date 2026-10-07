@@ -7,3 +7,33 @@ body {
 article {
     width: clamp(200px, 50%, 600px);
 }
+
+.site-header {
+    background-color: #72a0e1;
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 20px 40px;
+}
+
+.site-title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.site-header nav {
+    display: flex;
+    gap: 25px;
+}
+
+.site-header a {
+    color: white;
+    text-decoration: none;
+}
+
+.site-header a:hover {
+    text-decoration: underline;
+}
